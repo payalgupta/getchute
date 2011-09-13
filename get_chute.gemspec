@@ -1,6 +1,7 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
 require "get_chute/version"
+require "httparty"
 
 Gem::Specification.new do |s|
   s.name        = "get_chute"
