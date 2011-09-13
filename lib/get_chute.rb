@@ -13,5 +13,6 @@ require 'get_chute/resource'
 require 'get_chute/meta'
 require 'get_chute/chute'
 require 'get_chute/asset'
+require 'get_chute/account'
 
 require 'get_chute/comment'

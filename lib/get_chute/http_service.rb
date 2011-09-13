@@ -1,13 +1,17 @@
 module Chute
   class GCRequest
     include HTTParty
-    require File.join(RAILS_ROOT, 'config/chute_configuration.rb')
+    #require File.join(RAILS_ROOT, "/config/chute_configuration.rb")
+    
+    API_URL = 'api.developer.getchute.com/v1'
+    API_KEY = "OAuth c33a36237da089bb5bfa252faf72469a0871a20ff0f50143afbac16ee7caa1e9"
+    
     HEADERS = {"authorization" => API_KEY}
   
     base_uri  API_URL
     headers   HEADERS
 
-    def get(url, params=nil)
+    def get(url, params=nil) 
       GCResponse.new(GCRequest.get(url, {:body => params}))
     end
     
