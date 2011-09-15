@@ -1,4 +1,5 @@
-require "get_chute/version"
+#require "get_chute/version"
+#require "httparty"
 
 # include utility modules
 require 'get_chute/util'

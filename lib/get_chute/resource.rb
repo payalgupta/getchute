@@ -61,7 +61,8 @@ module Chute
     def self.perform(response)
       collection = Chute::GCCollection.new
       if response.is_success
-        data = response.data["#{class_path}"] || response.data
+        data = response.data
+        #data = response.data["#{class_path}"] || response.data
         data.each do |item|
           new_resource = self.new
           item.each do |key, value|

@@ -1,6 +1,11 @@
 module Chute
   class GCChute < GCResource
     
+    CHUTE_STATUS =  {
+                      "401" => "Password Protected",
+                      "200" => "Public"
+                    }
+    
     #================================================#
     # Attribute Accessors                            #
     #================================================#
@@ -59,6 +64,17 @@ module Chute
     #================================================#
     # Class Methods                                  #
     #================================================#
+    
+    def self.fetch_status(shortcut)
+      chute     = Chute::GCChute.new
+      response  = get("/chutes/#{shortcut}/public/assets.js")
+      CHUTE_STATUS[response.status] || "InAccessible"
+    end
+    
+    def self.find_by_shortcut(shortcut)
+      chute = Chute::GCChute.new
+      chute.perform(get("/chutes/#{shortcut}"))
+    end
     
     def self.find_by_id(id)
       chute = Chute::GCChute.new

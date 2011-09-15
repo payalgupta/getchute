@@ -6,6 +6,7 @@ module Chute
     #================================================#
     
     attr_accessor :uid,
+                  :type,
                   :email,
                   :username,
                   :access_key,
