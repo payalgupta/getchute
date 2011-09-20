@@ -5,6 +5,7 @@
 require 'get_chute/util'
 require 'get_chute/http_service'
 require 'get_chute/collection'
+require 'get_chute/exception'
 
 # include chute modules
 

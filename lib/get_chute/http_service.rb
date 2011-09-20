@@ -26,7 +26,7 @@ module Chute
   end
 
   class GCResponse
-    attr_reader :raw_response, :data, :errors, :object, :status, :is_success
+    attr_reader :raw_response, :data, :errors, :status, :is_success
     def initialize(attributes = {})
       @raw_response     = attributes
       @status           = attributes.response.code
@@ -48,11 +48,10 @@ module Chute
       else
         @is_success = false
         @errors << parsed_response["error"]
+        if status == "401"
+          raise Chute::Exceptions::UnAuthorized, parsed_response["error"]
+        end
       end
-    end
-    
-    def objectify(class_name)
-      
     end
   end
 end

@@ -72,9 +72,7 @@ module Chute
         end
         return collection
       else
-        #payal says: create an exception for such cases
-        #self.errors = response.errors
-        return false
+        raise Chute::Exceptions::InValidResponse, response.errors
       end
     end
     
