@@ -21,7 +21,8 @@ module Chute
     end
     
     def destroy
-      perform(self.class.delete("/#{resource_name}/#{id}"))
+      response = self.class.delete("/#{resource_name}/#{id}")
+      response.is_success
     end
     
     def resource_name;end

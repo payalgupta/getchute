@@ -18,6 +18,10 @@ module Chute
       'assets'
     end
     
+    def custom_url(height, width)
+      "#{url}/#{height}x#{width}" if url
+    end
+    
     #================================================#
     # Class Methods                                  #
     #================================================#
