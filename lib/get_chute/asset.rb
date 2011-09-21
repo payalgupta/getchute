@@ -34,6 +34,32 @@ module Chute
     def self.class_path
       "assets"
     end
+    
+    def self.heart(id)
+      response = get("/assets/#{id}/heart")
+      response.is_success
+    end
+    
+    def self.unheart(id)
+      response = get("/assets/#{id}/unheart")
+      response.is_success
+    end
+    
+    def self.remove(ids=[])
+      response = post("/assets/remove", {:asset_ids => ids})
+      response.is_success
+    end
+    
+    def self.verify(files=[])
+      files = [{
+        :url    => "Users/payalgupta/Desktop/39-Dcroe.jpg",
+        :size   => 34500,
+        :md5    => 34500
+      }]
+      # files = ["Users/payalgupta/Desktop/39-Dcroe.jpg"]
+      response = post("/assets/verify", {:files => files})
+      response
+    end
 
   end
 end

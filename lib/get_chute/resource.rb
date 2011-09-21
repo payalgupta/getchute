@@ -38,7 +38,7 @@ module Chute
     def perform(response)
       if response.is_success
         response.data.each do |key, value|
-          attributes[key.to_sym] = response.data[key] if self.instance_variable_defined?("@#{key}")
+          attributes[key.to_sym] = response.data[key] if (self.instance_variable_defined?("@#{key}") rescue nil)
         end
         return true
       else
@@ -62,12 +62,12 @@ module Chute
     def self.perform(response)
       collection = Chute::GCCollection.new
       if response.is_success
-        data = response.data
-        #data = response.data["#{class_path}"] || response.data
+        data = Hash === response.data ? response.data["#{class_path}"] : response.data
+        data = [] unless (data and !data.empty?)
         data.each do |item|
           new_resource = self.new
           item.each do |key, value|
-            new_resource.attributes[key.to_sym] = value if new_resource.instance_variable_defined?("@#{key}")
+            new_resource.attributes[key.to_sym] = value if (new_resource.instance_variable_defined?("@#{key}") rescue nil)
           end
           collection << new_resource
         end
@@ -156,14 +156,16 @@ module Chute
     class << self
       def attr_accessor(*names)
         super
-        names.each do |name|
-          self.class_eval do
-            define_method name do
-              attributes[name]
-            end
+        unless name.match(/^m_/)
+          names.each do |name|
+            self.class_eval do
+              define_method name do
+                attributes[name]
+              end
 
-            define_method("#{name}=") do |value|
-              attributes[name] = value
+              define_method("#{name}=") do |value|
+                attributes[name] = value
+              end
             end
           end
         end
