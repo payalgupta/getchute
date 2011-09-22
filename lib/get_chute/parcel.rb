@@ -12,7 +12,7 @@ module Chute
       @status      = status
       @share_url   = share_url
       @device_id   = device_id
-      @asset_count = assets_count
+      @asset_count = asset_count
     end
     
     #================================================#

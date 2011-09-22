@@ -5,7 +5,8 @@ module Chute
     # Attribute Accessors                            #
     #================================================#
     
-    attr_accessor :uid,
+    attr_accessor :id,
+                  :uid,
                   :type,
                   :email,
                   :username,
@@ -13,6 +14,8 @@ module Chute
                   :chute_user_id
                   
     def initialize(attributes = {})
+      super
+      @id             = attributes[:id]
       @uid            = attributes[:uid]
       @email          = attributes[:email]
       @username       = attributes[:username]

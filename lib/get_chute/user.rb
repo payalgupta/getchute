@@ -37,6 +37,40 @@ module Chute
       "#{resource_name}"
     end
     
+    def accounts
+      Chute::GCAccount.perform(self.class.get("/#{id}/accounts"))
+    end
+    
+    def assets
+      Chute::GCAsset.perform(self.class.get("/#{id}/assets"))
+    end
+    
+    def bundles
+      Chute::GCBundle.perform(self.class.get("/#{id}/bundles"))
+    end
+    
+    def chutes
+      Chute::GCChute.perform(self.class.get("/#{id}/chutes"))
+    end
+    
+    def parcels
+      Chute::GCParcel.perform(self.class.get("/#{id}/parcels"))
+    end
+    
+    #below collections aren't working yet, there classes still ned to be implemented
+    
+    def hearts
+      Chute::GCChute.perform(self.class.get("/#{id}/hearts"))
+    end
+    
+    def devices
+      Chute::GCAsset.perform(self.class.get("/#{id}/devices"))
+    end
+    
+    def notices
+      Chute::GCAsset.perform(self.class.get("/#{id}/notices"))
+    end
+    
     #================================================#
     # Class Methods                                  #
     #================================================#
