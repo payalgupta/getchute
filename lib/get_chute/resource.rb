@@ -36,6 +36,10 @@ module Chute
       raise NotImplementedError
     end
     
+    def resource_path
+      "#{resource_name}/#{id}"
+    end
+    
     def valid?
       errors.size == 0
     end
@@ -102,7 +106,7 @@ module Chute
     # in case key available, set the value of the key
     # or if key is nil, set the full meta data
     def set_meta_data(data, key=nil)
-      response = (key.blank? and Hash === data) ? (self.class.post("/#{resource_name}/#{id}/meta", data.to_json)) : (self.class.post("/#{resource_name}/#{id}/meta/#{key}", data))
+      response = (key.blank? and Hash === data) ? (self.class.post("/#{resource_path}/meta", data.to_json)) : (self.class.post("/#{resource_path}/meta/#{key}", data))
       if response.is_success
         Hash === data ? (self.meta = data) : (self.meta[key]  = data)
         true
@@ -116,9 +120,9 @@ module Chute
     # or if key is nil, return the full meta data
     def get_meta_data(key=nil)
       if key.blank?
-        response  = self.class.get("/#{resource_name}/#{id}/meta")
+        response  = self.class.get("/#{resource_path}/meta")
       else
-        response  = self.class.get("/#{resource_name}/#{id}/meta/#{key}")
+        response  = self.class.get("/#{resource_path}/meta/#{key}")
       end
       if response.is_success
         Hash === response.data ? (self.meta = response.data) : (self.meta[key]  = response.data)
@@ -129,10 +133,10 @@ module Chute
     
     def delete_meta_data(key = nil)
       if key.blank?
-        response = self.class.delete("/#{resource_name}/#{id}/meta")
+        response = self.class.delete("/#{resource_path}/meta")
         response.is_success ? self.meta = {} : false
       else
-        response = self.class.delete("/#{resource_name}/#{id}/meta/#{key}")
+        response = self.class.delete("/#{resource_path}/meta/#{key}")
         response.is_success ? self.meta.delete(key) : false
       end
     end
