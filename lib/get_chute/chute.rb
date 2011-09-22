@@ -54,7 +54,27 @@ module Chute
     #================================================#
     
     def assets
-      Chute::GCAsset.perform(get("/chutes/#{id}/assets"))
+      Chute::GCAsset.perform(self.class.get("/chutes/#{id}/assets"))
+    end
+    
+    # def add_assets(asset_ids)
+    #   response = self.class.post("/chutes/#{id}/add_assets", :asset_ids => "#{asset_ids}")
+    #   response.is_success
+    # end
+    
+    def remove_assets(asset_ids)
+      response = self.class.post("/chutes/#{id}/assets/remove", :asset_ids => asset_ids)
+      response.is_success
+    end
+    
+    def add_comment(text, asset_id)
+      comment = Chute::GCComment.new
+      comment.perform(self.class.post("/chutes/#{id}/assets/#{asset_id}/comments", {:comment => "test comment by payal"}))
+      comment
+    end
+    
+    def comments(asset_id)
+      Chute::GCComment.perform(self.class.get("/chutes/#{id}/assets/#{asset_id}/comments"))
     end
     
     def resource_name

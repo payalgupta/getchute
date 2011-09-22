@@ -1,11 +1,12 @@
 module Chute
   class GCResource
-    attr_accessor :attributes, :errors, :meta
+    attr_accessor :attributes, :errors, :meta, :prefix_options
     
     def initialize(attributes = {})
-      @errors     = []
-      @attributes = attributes
-      @meta     ||= get_meta_data if (id and has_meta?)
+      @errors         = []
+      @attributes     = attributes
+      @prefix_options = {}
+      @meta         ||= get_meta_data if (id and has_meta?)
     end
     
     #================================================#
@@ -13,19 +14,27 @@ module Chute
     #================================================#
     
     def save
-      perform(self.class.post("/#{resource_name}", {"#{resource_name.singularize}" => attributes}))
+      options = {}
+      options["#{resource_name.singularize}"] = attributes
+      options.merge!(prefix_options)
+      perform(self.class.post("/#{resource_name}", options))
     end
     
     def update
-      perform(self.class.put("/#{resource_name}/#{id}", {"#{resource_name.singularize}" => attributes}))
+      options = {}
+      options["#{resource_name.singularize}"] = attributes
+      options.merge!(prefix_options)
+      perform(self.class.put("/#{resource_name}/#{id}", options))
     end
     
     def destroy
-      response = self.class.delete("/#{resource_name}/#{id}")
+      response = self.class.delete("/#{resource_name}/#{id}", prefix_options)
       response.is_success
     end
     
-    def resource_name;end
+    def resource_name
+      raise NotImplementedError
+    end
     
     def valid?
       errors.size == 0
@@ -51,9 +60,13 @@ module Chute
     # Class Methods                                  #
     #================================================#
     
-    def self.all;end
+    def self.all
+      raise NotImplementedError
+    end
     
-    def self.find_by_id(id);end
+    def self.find_by_id(id)
+      raise NotImplementedError
+    end
     
     def self.search(key, value=nil)
       self.perform(get("/#{class_path}/meta/#{key}/#{value}"))
@@ -156,7 +169,7 @@ module Chute
     class << self
       def attr_accessor(*names)
         super
-        unless name.match(/^m_/)
+        unless name.match(/^x_/)
           names.each do |name|
             self.class_eval do
               define_method name do
