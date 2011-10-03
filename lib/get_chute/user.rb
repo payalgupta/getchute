@@ -7,9 +7,7 @@ module Chute
                   :avatar,
                   :notification_photos,
                   :notification_comments,
-                  :notification_invites#,
-                  #:assets,
-                  #:storage
+                  :notification_invites
 
     #================================================#
     # Attribute Accessors                            #
@@ -69,6 +67,11 @@ module Chute
     
     def notices
       Chute::GCAsset.perform(self.class.get("/#{id}/notices"))
+    end
+    
+    def single_use_token
+      response = self.class.get("/oauth/single_use_token", nil, {'X_USER_IDENTIFIER' => id})
+      response.data
     end
     
     #================================================#

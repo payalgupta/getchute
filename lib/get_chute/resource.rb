@@ -6,7 +6,7 @@ module Chute
       @errors         = []
       @attributes     = attributes
       @prefix_options = {}
-      @meta         ||= get_meta_data if (id and has_meta?)
+      #@meta         ||= get_meta_data if (id and has_meta?)
     end
     
     #================================================#
@@ -145,22 +145,22 @@ module Chute
     # Request/Response Methods                       #
     #================================================#
     
-    def self.get(url, params=nil)
+    def self.get(url, params=nil, headers=nil)
       @request = GCRequest.new()
       @request.get(url, params)
     end
 
-    def self.post(url, params=nil)
+    def self.post(url, params=nil, headers=nil)
       @request = GCRequest.new()
       @request.post(url, params)
     end
     
-    def self.put(url, params=nil)
+    def self.put(url, params=nil, headers=nil)
       @request = GCRequest.new()
       @request.put(url, params)
     end
     
-    def self.delete(url, params=nil)
+    def self.delete(url, params=nil, headers=nil)
       @request = GCRequest.new()
       @request.delete(url, params)
     end

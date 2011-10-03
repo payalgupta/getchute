@@ -5,22 +5,25 @@ module Chute
     HEADERS = {"authorization" => API_KEY}
   
     base_uri  API_URL
-    headers   HEADERS
 
-    def get(url, params=nil) 
-      GCResponse.new(GCRequest.get(url, {:body => params}))
+    def get(url, params=nil, header_options=nil) 
+      GCResponse.new(GCRequest.get(url, {:body => params, :headers => get_headers(header_options)}))
     end
     
-    def post(url, params=nil)
-      GCResponse.new(GCRequest.post(url, {:body => params}))
+    def post(url, params=nil, header_options=nil)
+      GCResponse.new(GCRequest.post(url, {:body => params, :headers => get_headers(header_options)}))
     end
     
-    def put(url, params=nil)
-      GCResponse.new(GCRequest.put(url, {:body => params}))
+    def put(url, params=nil, header_options=nil)
+      GCResponse.new(GCRequest.put(url, {:body => params, :headers => get_headers(header_options)}))
     end
     
-    def delete(url, params=nil)
-      GCResponse.new(GCRequest.delete(url, {:body => params}))
+    def delete(url, params=nil, header_options=nil)
+      GCResponse.new(GCRequest.delete(url, {:body => params, :headers => get_headers(header_options)}))
+    end
+    
+    def get_headers(header_options)
+      Hash === header_options ? header_options.merge(HEADERS) : HEADERS
     end
 
   end
