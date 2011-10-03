@@ -6,7 +6,6 @@ module Chute
       @errors         = []
       @attributes     = attributes
       @prefix_options = {}
-      #@meta         ||= get_meta_data if (id and has_meta?)
     end
     
     #================================================#
@@ -98,13 +97,37 @@ module Chute
     # Meta data Methods                              #
     #================================================#
     
+    # Public: Set whether the resource has meta data or not
+    
     def has_meta?
       true
     end
     
-    # set meta data
-    # in case key available, set the value of the key
-    # or if key is nil, set the full meta data
+    # Public: Set meta data for one or more keys for the resource.
+    #
+    # data  - Hash or String.
+    #         Hash of key/value pair to be added to the meta data.
+    #         String value for a key specified as the next parameter.
+    #
+    # key   - Optional. String if a specific key value to be set.
+    #
+    # Examples
+    #
+    #   chute = GCChute.find_by_id(23)  
+    #   # => GCChute instance
+    # 
+    #   For a key.
+    #     chute.set_meta_data("Testing", :title)
+    #     # => true
+    #     chute.get_meta_data(:title)
+    #     # => "Testing"
+    #
+    #   Add a Hash to meta data.
+    #     chute.set_meta_data({:details => "Testing the methods", :source => "Mobile"})
+    #     # => true
+    #     chute.get_meta_data
+    #     # => {:title => "Testing", :details => "Testing the methods", :source => "Mobile"}
+    
     def set_meta_data(data, key=nil)
       response = (key.blank? and Hash === data) ? (self.class.post("/#{resource_path}/meta", data.to_json)) : (self.class.post("/#{resource_path}/meta/#{key}", data))
       if response.is_success
@@ -114,10 +137,28 @@ module Chute
         false
       end
     end
-
-    # get meta data
-    # in case key available, return the value of the key
-    # or if key is nil, return the full meta data
+    
+    # Public: Get complete meta data or a specific key for the resource.
+    #
+    # key - Optional. String if a specific key value to be fetched.
+    #
+    # Examples
+    #
+    #   chute = GCChute.find_by_id(23)  
+    #   # => GCChute instance
+    # 
+    #   With a key.
+    #     chute.get_meta_data(:title)
+    #     # => "Testing"
+    #
+    # Returns String value of meta data for a key
+    #
+    #   Without a key.
+    #     chute.get_meta_data
+    #     # => {:title => "Testing", :source => "Mobile"}
+    # 
+    # Returns meta data Hash without a key
+    
     def get_meta_data(key=nil)
       if key.blank?
         response  = self.class.get("/#{resource_path}/meta")
@@ -130,6 +171,30 @@ module Chute
         false
       end
     end
+    
+    # Public: Deletes complete meta data or a specific key for the resource.
+    #
+    # key - Optional. String if a specific key to be deleted.
+    #
+    # Examples
+    #
+    #   chute = GCChute.find_by_id(23)  
+    #   # => GCChute instance
+    #
+    #   chute.get_meta_data 
+    #   # => {:title => "Testing", :source => "Mobile"}
+    # 
+    #   With a key.
+    #     chute.delete_meta_data(:title)
+    #     # => "Testing"
+    #     chute.get_meta_data
+    #     # => {:source => "Mobile"}
+    #
+    #   Without a key.
+    #     chute.delete_meta_data
+    #     # => {}
+    #     chute.get_meta_data
+    #     # => {}
     
     def delete_meta_data(key = nil)
       if key.blank?
@@ -145,20 +210,52 @@ module Chute
     # Request/Response Methods                       #
     #================================================#
     
+    # Public: Custom get request to a specific URL. 
+    #
+    # url     - relative url.
+    # params  - parameters hash.
+    # headers - headers hash.
+    #
+    # Returns a GCResponse.
+    
     def self.get(url, params=nil, headers=nil)
       @request = GCRequest.new()
       @request.get(url, params)
     end
+    
+    # Public: Custom post request to a specific URL. 
+    #
+    # url     - relative url.
+    # params  - parameters hash.
+    # headers - headers hash.
+    #
+    # Returns a GCResponse.
 
     def self.post(url, params=nil, headers=nil)
       @request = GCRequest.new()
       @request.post(url, params)
     end
     
+    # Public: Custom put request to a specific URL. 
+    #
+    # url     - relative url.
+    # params  - parameters hash.
+    # headers - headers hash.
+    #
+    # Returns a GCResponse.
+    
     def self.put(url, params=nil, headers=nil)
       @request = GCRequest.new()
       @request.put(url, params)
     end
+    
+    # Public: Custom delete request to a specific URL. 
+    #
+    # url     - relative url.
+    # params  - parameters hash.
+    # headers - headers hash.
+    #
+    # Returns a GCResponse.
     
     def self.delete(url, params=nil, headers=nil)
       @request = GCRequest.new()
@@ -167,9 +264,9 @@ module Chute
     
     protected
     
-    #=====================================================#
-    # keeps attributes hash in sync with class attributes #
-    #=====================================================#
+    # Protected: Overriding attr_accessor.
+    # It keeps attributes hash in sync with class attributes.
+
     class << self
       def attr_accessor(*names)
         super
@@ -186,17 +283,6 @@ module Chute
             end
           end
         end
-      end
-    end
-    
-    private
-    
-    def sync_meta(response, data=nil)
-      if response.is_success
-        data ||= response.data
-        Hash === data ? (self.meta = data) : (self.meta[key]  = data)
-      else
-        false
       end
     end
     
