@@ -1,18 +1,18 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
-require "get_chute/version"
+require "chute/version"
 require "httparty"
 
 Gem::Specification.new do |s|
-  s.name        = "get_chute"
-  s.version     = GetChute::VERSION
+  s.name        = "chute"
+  s.version     = Chute::VERSION
   s.authors     = ["Payal Gupta"]
   s.email       = ["payal@getchute.com"]
   s.homepage    = ""
   s.summary     = %q{Chute API Integration}
   s.description = %q{This gem allows to map your models with a chute.}
 
-  s.rubyforge_project = "get_chute"
+  s.rubyforge_project = "chute"
 
   s.files         = `git ls-files`.split("\n")
   #s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")

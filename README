@@ -2,9 +2,9 @@ Installation and Setup:
 
 1. Add to Gemfile
 
-  gem install getchute
+  gem install chute
 
-2. Add configuration file 'config/getchute.rb' with the following details:
+2. Add configuration file 'config/chute.rb' with the following details:
 
   API_URL = "ADD API URL HERE"
   API_KEY = "ADD ACCESS TOKEN HERE"
